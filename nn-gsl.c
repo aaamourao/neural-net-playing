@@ -8,9 +8,17 @@
 #include <gsl/gsl_randist.h>
 
 typedef struct {
+  // number of inputs into the layer
   int num_inputs;
+
+  // number of neurons in the layer (= number of outputs)
   int num_neurons;
+
+  // weight matrix where each neuron is a row and each input weight is a column
   gsl_matrix *w;
+
+  // bias vector - note that this is implemented as a matrix -- it will be a
+  // Nx1 matrix (column-vector)
   gsl_matrix *b;
 } fc_layer; // a fully-connected neural network layer
 
@@ -80,10 +88,11 @@ gsl_matrix* get_layer_output(fc_layer *n, gsl_matrix *x) {
 }
 
 int main(void) {
-  int inputs = 3;
-  int neurons = 2;
+  int inputs = 4;
+  int neurons = 7;
   
-  fc_layer *layer = create_fc_layer(neurons, inputs);
+  fc_layer *layer = create_fc_layer(neurons, inputs); // input layer
+  fc_layer *out_node = create_fc_layer(1, neurons); // feed into a single output node
 
   gsl_matrix *in = gsl_matrix_alloc(inputs, 1);
   int i;
@@ -92,8 +101,9 @@ int main(void) {
   }
   
   gsl_matrix *layer_out = get_layer_output(layer, in);
+  layer_out = get_layer_output(out_node, layer_out);
 
-  for (i = 0; i < neurons; i++) {
+  for (i = 0; i < 1; i++) {
     printf("out_%d0 %g\n", i, gsl_matrix_get(layer_out, i, 0));
   }
 
