@@ -107,6 +107,14 @@ int main(void) {
     printf("out_%d0 %g\n", i, gsl_matrix_get(layer_out, i, 0));
   }
 
+  // this is how to isolate a single neuron
+  gsl_vector_view single_neuron_weight = gsl_matrix_row(layer->w, 3); // get the 4th neuron weights (index 3)
+  for (i = 0; i < single_neuron_weight.vector.size; i++) {
+    printf("w_3%d = %g ", i, single_neuron_weight.vector.data[i]);
+  }
+  printf("\n");
+  
+
   release_fc_layer(layer);
   gsl_matrix_free(layer_out);
   gsl_matrix_free(in);
